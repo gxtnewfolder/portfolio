@@ -79,20 +79,20 @@ const Home: FC = () => {
           </motion.p> */}
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="relative w-[280px] h-[280px] rounded-full overflow-hidden border-4 border-gray-700"
         >
-          {/* <Image
+          <Image
             src="/profile.jpg"
             alt="Profile picture"
             fill
             className="object-cover"
             priority
-          /> */}
-        </motion.div>
+          />
+        </motion.div> */}
       </div>
     </section>
   );
