@@ -91,7 +91,7 @@ const Contact: FC = () => {
             className="bg-gray-900/50 p-4 sm:p-6 rounded-lg"
           >
             <h3 className="text-white text-lg sm:text-xl font-bold mb-4 sm:mb-6">Send a Message</h3>
-            <form className="space-y-4 sm:space-y-6">
+            <form action="https://getform.io/f/9bde9680-c60e-4a04-a021-c98c3ee8928a" method='POST' className="space-y-4 sm:space-y-6">
               <div>
                 <label htmlFor="name" className="text-gray-400 text-xs sm:text-sm block mb-1 sm:mb-2">
                   Name
