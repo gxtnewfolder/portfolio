@@ -3,9 +3,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
 
 @layer base {
-  body {
-    @apply font-[Raleway] bg-[#0a192f];
+  :root {
+    --background: 255 255 255;
+    --foreground: 17 17 17;
   }
+
+  [data-theme='dark'] {
+    --background: 17 17 17;
+    --foreground: 255 255 255;
+  }
+
+  body {
+    @apply font-[Raleway] antialiased;
+    @apply bg-white text-gray-900 transition-colors duration-300;
+    @apply dark:bg-[#111111] dark:text-gray-300;
+  }
+
   li {
     @apply px-4 cursor-pointer;
   }
@@ -21,32 +34,29 @@
   }
 
   .menu-hide {
-    @apply fixed top-0 -right-full w-full h-screen bg-[#0a192f] flex flex-col justify-start pt-12 pl-6 transition-[right] duration-300;
+    @apply fixed top-0 -right-full w-full h-screen bg-white dark:bg-[#111111] flex flex-col justify-start pt-12 pl-6 transition-all duration-300;
   }
 
   .menu-show {
-    @apply fixed top-0 right-0 w-full h-screen bg-[#0a192f] flex flex-col justify-start pt-12 pl-6 transition-[right] duration-300;
+    @apply fixed top-0 right-0 w-full h-screen bg-white dark:bg-[#111111] flex flex-col justify-start pt-12 pl-6 transition-all duration-300;
   }
 }
 
+/* Base theme setup */
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 17, 17, 17;
-  --background-end-rgb: 17, 17, 17;
+  color-scheme: light;
+}
+
+:root[class~="dark"] {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-    to bottom,
-    rgb(var(--background-start-rgb)),
-    rgb(var(--background-end-rgb))
-  );
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+  min-height: 100vh;
 }
 
 /* Custom scrollbar */
@@ -55,28 +65,26 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  @apply bg-gray-100 dark:bg-[#1a1a1a] transition-colors duration-300;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 5px;
+  @apply bg-gray-300 dark:bg-[#333] rounded-md transition-colors duration-300;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  @apply bg-gray-400 dark:bg-[#444];
 }
 
 /* Selection color */
 ::selection {
-  background: rgba(59, 130, 246, 0.2);
-  color: #fff;
+  @apply bg-blue-500/20 text-gray-900 dark:text-white;
 }
 
 /* Focus outline */
 *:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  @apply shadow-[0_0_0_2px_rgba(59,130,246,0.5)];
 }
 
 /* Animations */
@@ -94,4 +102,5 @@ html {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
 }
+
 

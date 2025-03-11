@@ -8,7 +8,7 @@ const Home: FC = () => {
   return (
     <section 
       id="home" 
-      className="w-full bg-[#111111] text-white pt-20 pb-10"
+      className="w-full bg-white dark:bg-[#111111] text-gray-900 dark:text-white pt-20 pb-10 transition-colors duration-300"
       aria-label="Home section"
     >
       <div className="max-w-[1024px] mx-auto px-8 h-full flex flex-col md:flex-row items-center justify-between gap-12">
@@ -30,7 +30,7 @@ const Home: FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-2xl md:text-3xl text-gray-300 mb-6"
+            className="text-2xl md:text-3xl text-gray-600 dark:text-gray-300 mb-6"
           >
             Software Engineer
           </motion.h2>
@@ -39,7 +39,7 @@ const Home: FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-gray-400 text-lg leading-relaxed mb-8 max-w-[600px]"
+            className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8 max-w-[600px]"
           >
             Analytical problem-solver skilled at troubleshooting ML deployment & optimizing workflows.
             Fast self-learner adapting quickly to new technologies & programming paradigms.
@@ -53,19 +53,19 @@ const Home: FC = () => {
             className="flex gap-6 mb-8"
           >
             <a href="https://github.com/gxtnewfolder" target="_blank" rel="noopener noreferrer"
-               className="text-2xl hover:text-blue-500 transition-colors">
+               className="text-2xl text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               <FaGithub />
             </a>
             <a href="https://linkedin.com/in/arnatngaw" target="_blank" rel="noopener noreferrer"
-               className="text-2xl hover:text-blue-500 transition-colors">
+               className="text-2xl text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               <FaLinkedin />
             </a>
             <a href="mailto:arnat.ngaw@gmail.com"
-               className="text-2xl hover:text-blue-500 transition-colors">
+               className="text-2xl text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               <HiMail />
             </a>
             <a href="tel:+66993528844"
-               className="text-2xl hover:text-blue-500 transition-colors">
+               className="text-2xl text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               <HiPhone />
             </a>
           </motion.div>
