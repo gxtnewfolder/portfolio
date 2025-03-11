@@ -2,6 +2,7 @@
 import { FC } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import Image from 'next/image';
 
 interface Project {
   title: string;
@@ -16,7 +17,7 @@ const projects: Project[] = [
   {
     title: 'MLOps Azure Pipeline',
     description: 'Developed an end-to-end MLOps pipeline using Azure services for manufacturing industries. Implemented automated model training, validation, and deployment workflows.',
-    image: '/images/mlops.png',
+    image: '/assets/mlopswork.png',
     technologies: ['Azure MLOps', 'Python', 'Azure DevOps', 'Azure Pipelines'],
     github: 'https://github.com/gxtnewfolder/mlops-project'
   }
@@ -44,12 +45,12 @@ const Work: FC = () => {
               className="bg-gray-900/50 rounded-lg overflow-hidden flex flex-col h-full"
             >
               <div className="relative h-40 sm:h-48 w-full">
-                {/* <Image
+                <Image
                   src={project.image}
                   alt={project.title}
                   fill
                   className="object-cover"
-                /> */}
+                />
               </div>
               <div className="p-4 sm:p-6 flex flex-col flex-grow">
                 <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
