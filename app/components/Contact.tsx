@@ -99,6 +99,7 @@ const Contact: FC = () => {
                 <input
                   type="text"
                   id="name"
+                  name="name"
                   className="w-full bg-gray-800 text-white rounded-md px-3 sm:px-4 py-2 text-sm sm:text-base
                            focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
                 />
@@ -110,6 +111,7 @@ const Contact: FC = () => {
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   className="w-full bg-gray-800 text-white rounded-md px-3 sm:px-4 py-2 text-sm sm:text-base
                            focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
                 />
@@ -120,6 +122,7 @@ const Contact: FC = () => {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={4}
                   className="w-full bg-gray-800 text-white rounded-md px-3 sm:px-4 py-2 text-sm sm:text-base
                            focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow resize-y min-h-[100px]"
