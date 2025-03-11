@@ -61,11 +61,16 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
           </>
         )}
         
-        <img
-          src={project.images[currentIndex]}
-          alt={project.title}
-          className="w-full h-full object-contain"
-        />
+        <div className="relative w-full h-full">
+          <Image
+            src={project.images[currentIndex]}
+            alt={project.title}
+            fill
+            sizes="(max-width: 1200px) 90vw, 1200px"
+            priority={currentIndex === 0}
+            className="object-contain"
+          />
+        </div>
         
         {project.images.length > 1 && (
           <div className="absolute bottom-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
@@ -74,6 +79,99 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
         )}
       </div>
     </div>
+  );
+};
+
+const ProjectCard: FC<{ project: Project; index: number }> = ({ project, index }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.2 }}
+      className="bg-gray-100 dark:bg-gray-900/50 rounded-lg overflow-hidden flex flex-col h-full transition-colors duration-300"
+    >
+      <motion.div 
+        className="relative h-40 sm:h-48 w-full group cursor-pointer overflow-hidden"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+      >
+        <Image
+          loading="lazy"
+          src={project.images[currentImageIndex]}
+          alt={project.title}
+          fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          priority={index === 0}
+          quality={90}
+          className="object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+        {project.images.length > 1 && (
+          <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+            {currentImageIndex + 1}/{project.images.length}
+          </div>
+        )}
+      </motion.div>
+      <div className="p-4 sm:p-6 flex flex-col flex-grow">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
+          {project.title}
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base mb-4 flex-grow">
+          {project.description}
+        </p>
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-2">
+            {project.technologies.map((tech, idx) => (
+              <span
+                key={idx}
+                className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 rounded-full transition-colors duration-300"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-4">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
+                title="View Source Code"
+              >
+                <FaGithub className="w-5 h-5 sm:w-6 sm:h-6" />
+              </a>
+            )}
+            {project.demo && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
+                title="View Live Demo"
+              >
+                <FaExternalLinkAlt className="w-5 h-5 sm:w-5 sm:h-5" />
+              </a>
+            )}
+            {project.docs && (
+              <a
+                href={project.docs}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
+                title="View Documentation"
+              >
+                <FaBook className="w-5 h-5 sm:w-5 sm:h-5" />
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
@@ -101,16 +199,16 @@ const projects: Project[] = [
 ];
 
 const Work: FC = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState<{ [key: string]: number }>({});
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const handleImageNavigation = (project: Project, direction: 'prev' | 'next') => {
-    const currentIndex = currentImageIndex[project.title] || 0;
+    const currentIndex = selectedImageIndex;
     const newIndex = direction === 'prev'
       ? (currentIndex - 1 + project.images.length) % project.images.length
       : (currentIndex + 1) % project.images.length;
     
-    setCurrentImageIndex(prev => ({ ...prev, [project.title]: newIndex }));
+    setSelectedImageIndex(newIndex);
   };
 
   return (
@@ -126,87 +224,12 @@ const Work: FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
-              className="bg-gray-100 dark:bg-gray-900/50 rounded-lg overflow-hidden flex flex-col h-full transition-colors duration-300"
-            >
-              <motion.div 
-                className="relative h-40 sm:h-48 w-full group cursor-pointer overflow-hidden"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedProject(project)}
-              >
-                <Image
-                  src={project.images[currentImageIndex[project.title] || 0]}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-                {project.images.length > 1 && (
-                  <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
-                    {(currentImageIndex[project.title] || 0) + 1}/{project.images.length}
-                  </div>
-                )}
-              </motion.div>
-              <div className="p-4 sm:p-6 flex flex-col flex-grow">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
-                  {project.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base mb-4 flex-grow">
-                  {project.description}
-                </p>
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 rounded-full transition-colors duration-300"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex gap-4">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
-                        title="View Source Code"
-                      >
-                        <FaGithub className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </a>
-                    )}
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
-                        title="View Live Demo"
-                      >
-                        <FaExternalLinkAlt className="w-5 h-5 sm:w-5 sm:h-5" />
-                      </a>
-                    )}
-                    {project.docs && (
-                      <a
-                        href={project.docs}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
-                        title="View Documentation"
-                      >
-                        <FaBook className="w-5 h-5 sm:w-5 sm:h-5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            <div key={project.title} onClick={() => {
+              setSelectedProject(project);
+              setSelectedImageIndex(0);
+            }}>
+              <ProjectCard project={project} index={index} />
+            </div>
           ))}
         </div>
       </div>
@@ -214,8 +237,11 @@ const Work: FC = () => {
       {selectedProject && (
         <ImageModal
           project={selectedProject}
-          currentIndex={currentImageIndex[selectedProject.title] || 0}
-          onClose={() => setSelectedProject(null)}
+          currentIndex={selectedImageIndex}
+          onClose={() => {
+            setSelectedProject(null);
+            setSelectedImageIndex(0);
+          }}
           onNavigate={(direction) => handleImageNavigation(selectedProject, direction)}
         />
       )}
