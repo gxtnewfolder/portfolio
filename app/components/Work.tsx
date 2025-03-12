@@ -181,6 +181,14 @@ const projects: Project[] = [
     github: 'https://github.com/gxtnewfolder/mlops-project'
   },
   {
+    title: 'Pokemon Search App',
+    description: 'Developed a Pokemon Search application using Next.js, GraphQL with Apollo Client and Tailwind CSS.',
+    images: ['/assets/pokemon1.png', '/assets/pokemon2.png'],
+    technologies: ['Next.js', 'Tailwind CSS', 'GraphQL', 'Pokemon API'],
+    github: 'https://github.com/gxtnewfolder/search-pokemon',
+    demo: 'https://search-pokemon-flame-three.vercel.app/'
+  },
+  {
     title: 'Oil Distribution TAS System',
     description: 'Designed and implemented a Terminal Automation System (TAS) for auditing gas filling operations. Features include PI system integration for plant information management, Azure-based infrastructure, and financial KPI analysis.',
     images: [

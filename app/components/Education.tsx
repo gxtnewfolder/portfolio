@@ -75,7 +75,7 @@ const Timeline: FC<{ items: TimelineItem[] }> = ({ items }) => {
           } items-start mb-12 md:mb-16`}
         >
           {/* Timeline dot */}
-          <div className="absolute left-0 md:left-1/2 w-4 h-4 bg-blue-100 dark:bg-blue-500/20 ring-4 ring-blue-500/20 dark:ring-blue-400/20 rounded-full transform -translate-x-1/2 mt-1.5 transition-all duration-300"></div>
+          <div className="absolute left-0 md:left-1/2 w-4 h-4 bg-blue-500 ring-4 dark:ring-blue-400/20 rounded-full transform -translate-x-1/2 mt-1.5 transition-all duration-300"></div>
           
           {/* Content */}
           <div className={`w-full md:w-1/2 ${
