@@ -202,6 +202,13 @@ const projects: Project[] = [
     docs: '/docs/oil.pdf'
   },
   {
+    title: 'Street Vender Detection in IRAIC2023',
+    description: 'Developed a Street Vender Detection system using YOLOv5. The system detects street vendors in real-time and provides an alert in web dashboard when a vendor is detected.',
+    images: ['/assets/sim1.png', '/assets/sim2.png'],
+    technologies: ['Next.js','YOLOv5', 'MongoDB', 'MQTT','Tailwind CSS'],
+    github: 'https://github.com/gxtnewfolder/sim_iraic-project'
+  },
+  {
     title: 'Node Red + Proteus',
     description: 'Created a Node Red Dashboard for monitoring and controlling a Sensor.',
     images: ['/assets/works/1_1.png', '/assets/works/1_2.png', '/assets/works/1_3.png', '/assets/works/1_4.png'],

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "next-themes";
-import ThemeSwitch from "./components/ThemeSwitch";
+// import ThemeSwitch from "./components/ThemeSwitch";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,7 +24,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <div className="min-h-screen bg-white dark:bg-[#111111] text-gray-900 dark:text-gray-300 transition-colors duration-300">
             {children}
-            <ThemeSwitch />
+            {/* <ThemeSwitch /> */}
             <Analytics />
             <SpeedInsights />
           </div>
