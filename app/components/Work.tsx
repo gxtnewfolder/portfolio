@@ -83,8 +83,7 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
 };
 
 const ProjectCard: FC<{ project: Project; index: number }> = ({ project, index }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [currentImageIndex] = useState(0);
 
   return (
     <motion.div
@@ -97,11 +96,9 @@ const ProjectCard: FC<{ project: Project; index: number }> = ({ project, index }
         className="relative h-40 sm:h-48 w-full group cursor-pointer overflow-hidden"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        onHoverStart={() => setIsHovered(true)}
-        onHoverEnd={() => setIsHovered(false)}
+        
       >
         <Image
-          loading="lazy"
           src={project.images[currentImageIndex]}
           alt={project.title}
           fill
