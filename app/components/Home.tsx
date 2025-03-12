@@ -8,7 +8,7 @@ const Home: FC = () => {
   return (
     <section 
       id="home" 
-      className="w-full bg-white dark:bg-[#111111] text-gray-900 dark:text-white pt-20 pb-10 transition-colors duration-300"
+      className="w-full bg-gray-50 dark:bg-[#111111] text-gray-900 dark:text-white pt-20 pb-10 transition-colors duration-300"
       aria-label="Home section"
     >
       <div className="max-w-[1024px] mx-auto px-8 h-full flex flex-col md:flex-row items-center justify-between gap-12">

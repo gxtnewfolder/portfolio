@@ -193,6 +193,13 @@ const projects: Project[] = [
     demo: 'https://my-oil-distribution-app.vercel.app/',
     docs: '/docs/oil.pdf'
   },
+  {
+    title: 'Node Red + Proteus',
+    description: 'Created a Node Red Dashboard for monitoring and controlling a Sensor.',
+    images: ['/assets/works/1_1.png', '/assets/works/1_2.png', '/assets/works/1_3.png', '/assets/works/1_4.png'],
+    technologies: ['Node Red', 'Proteus', 'Dashboard'],
+    github: 'https://github.com/gxtnewfolder/G9_INC272'
+  }
 ];
 
 const Work: FC = () => {
@@ -209,7 +216,7 @@ const Work: FC = () => {
   };
 
   return (
-    <section id="work" className="w-full bg-white dark:bg-[#111111] py-12 sm:py-16 md:py-20 transition-colors duration-300">
+    <section id="work" className="w-full bg-gray-50 dark:bg-[#111111] py-12 sm:py-16 md:py-20 transition-colors duration-300">
       <div className="max-w-[1024px] mx-auto px-4 sm:px-6 md:px-8">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}

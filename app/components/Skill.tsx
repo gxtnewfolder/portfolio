@@ -71,7 +71,7 @@ const Skill: FC = () => {
   };
 
   return (
-    <section id="skills" className="w-full bg-white dark:bg-[#111111] pb-10 transition-colors duration-300">
+    <section id="skills" className="w-full bg-gray-50 dark:bg-[#111111] pb-10 transition-colors duration-300">
       <div className="max-w-[1024px] mx-auto px-8">
         <motion.h2 
           initial={{ opacity: 0, y: -20 }}
