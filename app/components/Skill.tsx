@@ -31,7 +31,6 @@ const skills: SkillTag[] = [
   { name: 'MLFlow', category: 'data' },
   { name: 'Pandas', category: 'data' },
   { name: 'scikit-learn', category: 'data' },
-  { name: 'seaborn', category: 'data' },
   { name: 'matplotlib', category: 'data' },
   { name: 'Power BI', category: 'data' },
   { name: 'ML Deployment', category: 'data' },
