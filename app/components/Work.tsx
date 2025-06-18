@@ -178,7 +178,7 @@ const projects: Project[] = [
     description: 'Developed an end-to-end MLOps pipeline using Azure services for manufacturing industries. Implemented automated model training, validation, and deployment workflows.',
     images: ['/assets/mlopswork.png'],
     technologies: ['Azure MLOps', 'Python', 'Azure DevOps', 'Azure Pipelines'],
-    github: 'https://github.com/gxtnewfolder/mlops-project'
+    github: 'https://github.com/gxtnewfolder/mlops-train'
   },
   {
     title: 'Pokemon Search App',

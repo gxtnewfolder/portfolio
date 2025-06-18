@@ -12,10 +12,10 @@ interface TimelineItem {
 
 const educationData: TimelineItem[] = [
   {
-    period: 'July 2021 - Present',
+    period: 'Jul 2021 - Jun 2025',
     title: 'Bachelor of Engineering in Automation Engineering',
     institution: 'King Mongkut\'s University of Technology Thonburi',
-    description: 'International Program | 3.29 GPA (7 semesters)',
+    description: 'International Program | 3.30 GPA',
     details: [
       'Senior Project: Machine Learning Operation (MLOps) in Azure',
       'Designed and implemented a scalable MLOps infrastructure for manufacturing industries.',
@@ -33,7 +33,7 @@ const educationData: TimelineItem[] = [
 
 const experienceData: TimelineItem[] = [
   {
-    period: 'Jun 2024 - Present',
+    period: 'Jun 2024 - Jun 2025',
     title: 'Software Engineer',
     institution: 'iCube Co., Ltd.',
     description: 'Software Engineer | Machine Learning Operation',
