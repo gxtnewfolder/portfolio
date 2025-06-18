@@ -1,9 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Arnat N. - Portfolio Website
 
-## Getting Started
+A modern, responsive portfolio website built with Next.js, showcasing my skills, experience, and projects as a Software Engineer specializing in Machine Learning Operations.
 
-First, run the development server:
+## 🚀 Features
 
+- **Responsive Design**: Optimized for all devices and screen sizes
+- **Dark/Light Theme**: Toggle between dark and light modes
+- **Smooth Animations**: Powered by Framer Motion for engaging user experience
+- **Interactive Sections**: 
+  - Home/Introduction
+  - Skills & Technologies
+  - Education
+  - Work Experience & Projects
+  - Contact Information
+- **Performance Optimized**: Built with Next.js 15 and optimized for speed
+- **SEO Friendly**: Proper meta tags and semantic HTML structure
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15.2.2 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **Animations**: Framer Motion
+- **Icons**: React Icons
+- **Theme**: next-themes
+- **Analytics**: Vercel Analytics & Speed Insights
+- **Deployment**: Vercel
+
+## 📁 Project Structure
+
+```
+portfolio/
+├── app/
+│   ├── components/
+│   │   ├── Home.tsx          # Hero section with introduction
+│   │   ├── Skill.tsx         # Skills and technologies
+│   │   ├── Education.tsx     # Educational background
+│   │   ├── Work.tsx          # Work experience and projects
+│   │   ├── Contact.tsx       # Contact information
+│   │   └── ThemeSwitch.tsx   # Theme toggle component
+│   ├── globals.css           # Global styles
+│   ├── layout.tsx            # Root layout
+│   └── page.tsx              # Main page component
+├── public/
+│   └── assets/               # Images and static assets
+└── package.json
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/gxtnewfolder/portfolio.git
+cd portfolio
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+3. Run the development server:
 ```bash
 npm run dev
 # or
@@ -14,23 +84,55 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to view the portfolio.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📝 Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-## Learn More
+## 🎨 Customization
 
-To learn more about Next.js, take a look at the following resources:
+### Personal Information
+Update your personal information in the component files:
+- `app/components/Home.tsx` - Name, title, bio, and social links
+- `app/components/Skill.tsx` - Skills and technologies
+- `app/components/Education.tsx` - Educational background
+- `app/components/Work.tsx` - Work experience and projects
+- `app/components/Contact.tsx` - Contact details
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Styling
+- Modify `app/globals.css` for global styles
+- Update `tailwind.config.js` for custom Tailwind configuration
+- Theme colors and styling can be adjusted in individual components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Assets
+- Replace images in `public/assets/` with your own
+- Update project screenshots in `public/assets/works/`
 
-## Deploy on Vercel
+## 🌐 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This portfolio is optimized for deployment on Vercel:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Deploy automatically on every push
+
+The project includes Vercel Analytics and Speed Insights for performance monitoring.
+
+## 📱 Contact
+
+- **Email**: arnat.ngaw@gmail.com
+- **Phone**: +66 99 352 8844
+- **GitHub**: [gxtnewfolder](https://github.com/gxtnewfolder)
+- **LinkedIn**: [arnatngaw](https://linkedin.com/in/arnatngaw)
+
+## 📄 License
+
+This project is private and for personal use.
+
+---
+
+Built with ❤️ using Next.js and Tailwind CSS
