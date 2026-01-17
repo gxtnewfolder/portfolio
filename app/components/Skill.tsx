@@ -1,6 +1,7 @@
 'use client';
 import { FC } from 'react';
 import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 
 interface SkillTag {
   name: string;
@@ -11,7 +12,6 @@ const skills: SkillTag[] = [
   // Programming & Scripting
   { name: 'Python', category: 'programming' },
   { name: 'C', category: 'programming' },
-  // { name: 'C++', category: 'programming' },
   { name: 'C#', category: 'programming' },
   { name: 'TypeScript', category: 'programming' },
   { name: 'SQL', category: 'programming' },
@@ -20,7 +20,6 @@ const skills: SkillTag[] = [
   { name: 'Angular', category: 'web' },
   { name: '.NET', category: 'web' },
   { name: 'React', category: 'web' },
-  // { name: 'Vite', category: 'web' },
   { name: 'Next.js', category: 'web' },
   { name: 'Node.js', category: 'web' },
   
@@ -44,11 +43,17 @@ const skills: SkillTag[] = [
   { name: 'Docker', category: 'cloud' },
   
   // Soft Skills
-  // { name: 'ML Deployment', category: 'soft' },
-  // { name: 'Workflow Optimization', category: 'soft' },
   { name: 'Fast Learning', category: 'soft' },
   { name: 'Problem Solving', category: 'soft' }
 ];
+
+const categoryLabels: Record<string, string> = {
+  programming: 'Programming & Scripting',
+  web: 'Web & Application',
+  data: 'Data & ML',
+  cloud: 'Cloud & DevOps',
+  soft: 'Soft Skills'
+};
 
 const Skill: FC = () => {
   const containerVariants = {
@@ -56,57 +61,97 @@ const Skill: FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.05,
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, scale: 0.8, y: 20 },
     visible: {
       opacity: 1,
-      y: 0
-    }
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
   };
 
+  const titleVariants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  // Group skills by category
+  const groupedSkills = skills.reduce((acc, skill) => {
+    if (!acc[skill.category]) {
+      acc[skill.category] = [];
+    }
+    acc[skill.category].push(skill);
+    return acc;
+  }, {} as Record<string, SkillTag[]>);
+
   return (
-    <section id="skills" className="w-full bg-gray-50 dark:bg-[#111111] pb-10 transition-colors duration-300">
+    <section id="skills" className="w-full bg-gray-50 dark:bg-[#111111] py-16 transition-colors duration-300">
       <div className="max-w-[1024px] mx-auto px-8">
         <motion.h2 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-gray-900 dark:text-white mb-8 transition-colors duration-300"
+          variants={titleVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-4xl font-bold text-gray-900 dark:text-white mb-10 transition-colors duration-300"
         >
           Skills & Proficiencies
         </motion.h2>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-wrap gap-3"
-        >
-          {skills.map((skill, index) => (
+        <div className="space-y-8">
+          {Object.entries(groupedSkills).map(([category, categorySkills]) => (
             <motion.div
-              key={index}
-              variants={itemVariants}
-              className={`
-                px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
-                ${skill.category === 'programming' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400' : ''}
-                ${skill.category === 'web' ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400' : ''}
-                ${skill.category === 'data' ? 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400' : ''}
-                ${skill.category === 'cloud' ? 'bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-400' : ''}
-                ${skill.category === 'soft' ? 'bg-pink-100 text-pink-700 dark:bg-pink-500/20 dark:text-pink-400' : ''}
-                hover:scale-105 transition-transform cursor-default
-              `}
+              key={category}
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
             >
-              {skill.name}
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+                {categoryLabels[category]}
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {categorySkills.map((skill) => (
+                  <motion.div
+                    key={skill.name}
+                    variants={itemVariants}
+                    whileHover={{ 
+                      scale: 1.1, 
+                      transition: { duration: 0.2 } 
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Badge 
+                      variant={skill.category}
+                      className="hover:shadow-lg hover:shadow-current/20 transition-shadow duration-300"
+                    >
+                      {skill.name}
+                    </Badge>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
-export default Skill; 
+export default Skill;

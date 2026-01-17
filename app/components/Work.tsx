@@ -1,8 +1,11 @@
 'use client';
 import { FC, useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaBook } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaGithub, FaExternalLinkAlt, FaBook, FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface Project {
   title: string;
@@ -23,41 +26,54 @@ interface ImageModalProps {
 
 const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNavigate }) => {
   return (
-    <div 
-      className="fixed inset-0 bg-black/75 flex items-center justify-center z-50"
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50"
       onClick={onClose}
     >
-      <div 
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
         className="relative w-[90vw] h-[90vh] max-w-[1200px]"
         onClick={e => e.stopPropagation()}
       >
-        <button
-          className="absolute top-4 right-4 text-white text-2xl z-10 cursor-pointer hover:text-gray-400"
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-4 right-4 text-white hover:bg-white/20 z-10"
           onClick={onClose}
         >
-          ×
-        </button>
+          <FaTimes className="w-5 h-5" />
+        </Button>
         
         {project.images.length > 1 && (
           <>
-            <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl z-10 cursor-pointer hover:text-gray-400"
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 onNavigate('prev');
               }}
             >
-              ‹
-            </button>
-            <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl z-10 cursor-pointer hover:text-gray-400"
+              <FaChevronLeft className="w-6 h-6" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 onNavigate('next');
               }}
             >
-              ›
-            </button>
+              <FaChevronRight className="w-6 h-6" />
+            </Button>
           </>
         )}
         
@@ -73,101 +89,139 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
         </div>
         
         {project.images.length > 1 && (
-          <div className="absolute bottom-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
-            {currentIndex + 1}/{project.images.length}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const ProjectCard: FC<{ project: Project; index: number }> = ({ project, index }) => {
-  const [currentImageIndex] = useState(0);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.2 }}
-      className="bg-gray-100 dark:bg-gray-900/50 rounded-lg overflow-hidden flex flex-col h-full transition-colors duration-300"
-    >
-      <motion.div 
-        className="relative h-40 sm:h-48 w-full group cursor-pointer overflow-hidden"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        
-      >
-        <Image
-          src={project.images[currentImageIndex]}
-          alt={project.title}
-          fill
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          priority={index === 0}
-          quality={90}
-          className="object-cover transition-transform duration-300 group-hover:scale-110"
-        />
-        {project.images.length > 1 && (
-          <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
-            {currentImageIndex + 1}/{project.images.length}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {project.images.map((_, idx) => (
+              <div 
+                key={idx}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  idx === currentIndex 
+                    ? 'bg-white w-6' 
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+              />
+            ))}
           </div>
         )}
       </motion.div>
-      <div className="p-4 sm:p-6 flex flex-col flex-grow">
-        <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
-          {project.title}
-        </h3>
-        <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base mb-4 flex-grow">
-          {project.description}
-        </p>
-        <div className="space-y-4">
+    </motion.div>
+  );
+};
+
+const ProjectCard: FC<{ project: Project; index: number; onImageClick: () => void }> = ({ project, index, onImageClick }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ 
+        duration: 0.6, 
+        delay: index * 0.1,
+        ease: [0.22, 1, 0.36, 1]
+      }}
+    >
+      <Card 
+        className="h-full overflow-hidden group"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <motion.div 
+          className="relative h-48 w-full overflow-hidden cursor-pointer"
+          onClick={onImageClick}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Image
+            src={project.images[0]}
+            alt={project.title}
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            priority={index === 0}
+            quality={90}
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          {/* Overlay on hover */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
+          {project.images.length > 1 && (
+            <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs backdrop-blur-sm">
+              1/{project.images.length}
+            </div>
+          )}
+        </motion.div>
+        
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg">{project.title}</CardTitle>
+          <CardDescription className="line-clamp-3">
+            {project.description}
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
             {project.technologies.map((tech, idx) => (
-              <span
+              <motion.div
                 key={idx}
-                className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 rounded-full transition-colors duration-300"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + idx * 0.05 }}
               >
-                {tech}
-              </span>
+                <Badge variant="default" className="text-xs">
+                  {tech}
+                </Badge>
+              </motion.div>
             ))}
           </div>
-          <div className="flex gap-4">
+          
+          <div className="flex gap-3">
             {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
-                title="View Source Code"
-              >
-                <FaGithub className="w-5 h-5 sm:w-6 sm:h-6" />
-              </a>
+              <Button variant="ghost" size="sm" asChild>
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <FaGithub className="w-4 h-4" />
+                  <span className="hidden sm:inline">Code</span>
+                </a>
+              </Button>
             )}
             {project.demo && (
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
-                title="View Live Demo"
-              >
-                <FaExternalLinkAlt className="w-5 h-5 sm:w-5 sm:h-5" />
-              </a>
+              <Button variant="ghost" size="sm" asChild>
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <FaExternalLinkAlt className="w-4 h-4" />
+                  <span className="hidden sm:inline">Demo</span>
+                </a>
+              </Button>
             )}
             {project.docs && (
-              <a
-                href={project.docs}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
-                title="View Documentation"
-              >
-                <FaBook className="w-5 h-5 sm:w-5 sm:h-5" />
-              </a>
+              <Button variant="ghost" size="sm" asChild>
+                <a
+                  href={project.docs}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <FaBook className="w-4 h-4" />
+                  <span className="hidden sm:inline">Docs</span>
+                </a>
+              </Button>
             )}
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 };
@@ -230,42 +284,61 @@ const Work: FC = () => {
     setSelectedImageIndex(newIndex);
   };
 
+  const titleVariants = {
+    hidden: { opacity: 0, y: -30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
   return (
-    <section id="work" className="w-full bg-gray-50 dark:bg-[#111111] py-12 sm:py-16 md:py-20 transition-colors duration-300">
+    <section id="work" className="w-full bg-gray-50 dark:bg-[#111111] py-16 transition-colors duration-300">
       <div className="max-w-[1024px] mx-auto px-4 sm:px-6 md:px-8">
         <motion.h2
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-8 sm:mb-12"
+          variants={titleVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-12"
         >
           Featured Projects
         </motion.h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {projects.map((project, index) => (
-            <div key={project.title} onClick={() => {
-              setSelectedProject(project);
-              setSelectedImageIndex(0);
-            }}>
-              <ProjectCard project={project} index={index} />
-            </div>
+            <ProjectCard 
+              key={project.title}
+              project={project} 
+              index={index}
+              onImageClick={() => {
+                setSelectedProject(project);
+                setSelectedImageIndex(0);
+              }}
+            />
           ))}
         </div>
       </div>
 
-      {selectedProject && (
-        <ImageModal
-          project={selectedProject}
-          currentIndex={selectedImageIndex}
-          onClose={() => {
-            setSelectedProject(null);
-            setSelectedImageIndex(0);
-          }}
-          onNavigate={(direction) => handleImageNavigation(selectedProject, direction)}
-        />
-      )}
+      <AnimatePresence>
+        {selectedProject && (
+          <ImageModal
+            project={selectedProject}
+            currentIndex={selectedImageIndex}
+            onClose={() => {
+              setSelectedProject(null);
+              setSelectedImageIndex(0);
+            }}
+            onNavigate={(direction) => handleImageNavigation(selectedProject, direction)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 };
 
-export default Work; 
+export default Work;

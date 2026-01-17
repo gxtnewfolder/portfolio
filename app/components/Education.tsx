@@ -1,6 +1,7 @@
 'use client';
 import { FC } from 'react';
 import { motion } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 interface TimelineItem {
   period: string;
@@ -61,107 +62,156 @@ const experienceData: TimelineItem[] = [
   }
 ];
 
-const Timeline: FC<{ items: TimelineItem[] }> = ({ items }) => {
+const Timeline: FC<{ items: TimelineItem[]; reverse?: boolean }> = ({ items, reverse = false }) => {
   return (
     <div className="relative">
       {/* Timeline line */}
-      <div className="absolute left-0 md:left-1/2 h-full w-0.5 bg-gray-200 dark:bg-gray-700 transform -translate-x-1/2"></div>
+      <div className="absolute left-0 md:left-1/2 h-full w-0.5 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500 transform -translate-x-1/2"></div>
       
       {/* Timeline items */}
-      {items.map((item, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.2 }}
-          className={`relative flex md:flex-row ${
-            index % 2 === 0 ? 'md:flex-row-reverse' : ''
-          } items-start mb-12 md:mb-16`}
-        >
-          {/* Timeline dot */}
-          <div className="absolute left-0 md:left-1/2 w-4 h-4 bg-blue-500 ring-4 dark:ring-blue-400/20 rounded-full transform -translate-x-1/2 mt-1.5 transition-all duration-300"></div>
-          
-          {/* Content */}
-          <div className={`w-full md:w-1/2 ${
-            index % 2 === 0 ? 'md:pl-12' : 'md:pr-12'
-          }`}>
-            <div className="bg-white dark:bg-gray-900/50 p-6 rounded-lg shadow-lg dark:shadow-none border border-gray-100 dark:border-gray-800 transition-all duration-300 hover:shadow-xl dark:hover:bg-gray-900/70">
-              <span className="text-blue-700 dark:text-blue-400 text-sm font-medium mb-2 block transition-colors duration-300">
-                {item.period}
-              </span>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 transition-colors duration-300">
-                {item.title}
-              </h3>
-              <h4 className="text-gray-600 dark:text-gray-400 font-medium mb-3 transition-colors duration-300">
-                {item.institution}
-              </h4>
-              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 transition-colors duration-300">
-                {item.description}
-              </p>
-              {item.details && (
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 text-sm space-y-2 transition-colors duration-300">
-                  {item.details.map((detail, idx) => (
-                    <li key={idx} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 cursor-default">
-                      {detail}
-                    </li>
-                  ))}
-                </ul>
-              )}
+      {items.map((item, index) => {
+        const isLeft = reverse ? index % 2 !== 0 : index % 2 === 0;
+        
+        return (
+          <motion.div
+            key={index}
+            initial={{ 
+              opacity: 0, 
+              x: isLeft ? 50 : -50 
+            }}
+            whileInView={{ 
+              opacity: 1, 
+              x: 0 
+            }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ 
+              duration: 0.6, 
+              delay: index * 0.15,
+              ease: [0.22, 1, 0.36, 1]
+            }}
+            className={`relative flex md:flex-row ${
+              isLeft ? 'md:flex-row-reverse' : ''
+            } items-start mb-12 md:mb-16`}
+          >
+            {/* Timeline dot with pulse animation */}
+            <motion.div 
+              className="absolute left-0 md:left-1/2 w-4 h-4 bg-blue-500 rounded-full transform -translate-x-1/2 mt-6 z-10"
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.15 + 0.2 }}
+            >
+              <span className="absolute inset-0 rounded-full bg-blue-500 animate-ping opacity-30"></span>
+            </motion.div>
+            
+            {/* Content */}
+            <div className={`w-full md:w-1/2 ${
+              isLeft ? 'md:pl-12' : 'md:pr-12'
+            } pl-8 md:pl-0`}>
+              <Card className="tilt-card">
+                <CardHeader>
+                  <span className="text-blue-600 dark:text-blue-400 text-sm font-medium mb-2 block">
+                    {item.period}
+                  </span>
+                  <CardTitle className="text-lg">{item.title}</CardTitle>
+                  <CardDescription className="font-medium">
+                    {item.institution}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    {item.description}
+                  </p>
+                  {item.details && (
+                    <ul className="list-none space-y-2">
+                      {item.details.map((detail, idx) => (
+                        <motion.li 
+                          key={idx}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.3 + idx * 0.1 }}
+                          className="text-gray-600 dark:text-gray-400 text-sm flex items-start gap-2 group"
+                        >
+                          <span className="text-blue-500 mt-1.5 group-hover:text-blue-400 transition-colors">•</span>
+                          <span className="group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors cursor-default">
+                            {detail}
+                          </span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  )}
+                </CardContent>
+              </Card>
             </div>
-          </div>
-        </motion.div>
-      ))}
+          </motion.div>
+        );
+      })}
     </div>
   );
 };
 
 const Education: FC = () => {
-  const containerVariants = {
+  const sectionVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: -30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
   };
 
   return (
-    <section id="education" className="w-full min-h-screen bg-gray-50 dark:bg-[#111111] py-10 transition-colors duration-300">
+    <section id="education" className="w-full min-h-screen bg-gray-50 dark:bg-[#111111] py-16 transition-colors duration-300">
       <div className="max-w-[1024px] mx-auto px-8">
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="mb-20"
-        >
-          <motion.h2 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-gray-900 dark:text-white mb-12 transition-colors duration-300"
-          >
-            Education
-          </motion.h2>
-          <Timeline items={educationData} />
-        </motion.div>
-
+        {/* Professional Experience - First */}
         <motion.div
-          variants={containerVariants}
+          variants={sectionVariants}
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="mb-24"
         >
           <motion.h2 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-gray-900 dark:text-white mb-12 transition-colors duration-300"
+            variants={titleVariants}
+            className="text-4xl font-bold text-gray-900 dark:text-white mb-12"
           >
             Professional Experience
           </motion.h2>
           <Timeline items={experienceData} />
+        </motion.div>
+
+        {/* Education - Second */}
+        <motion.div 
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <motion.h2 
+            variants={titleVariants}
+            className="text-4xl font-bold text-gray-900 dark:text-white mb-12"
+          >
+            Education
+          </motion.h2>
+          <Timeline items={educationData} reverse />
         </motion.div>
       </div>
     </section>
   );
 };
 
-export default Education; 
+export default Education;

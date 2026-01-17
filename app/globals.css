@@ -1,44 +1,114 @@
 @import "tailwindcss";
 
+/* Tailwind v4: Configure dark mode to use class selector */
+@variant dark (&:where(.dark, .dark *));
+
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
     --background: 255 255 255;
     --foreground: 17 17 17;
+    --card: 255 255 255;
+    --card-foreground: 17 17 17;
+    --primary: 59 130 246;
+    --primary-foreground: 255 255 255;
+    --secondary: 243 244 246;
+    --secondary-foreground: 17 17 17;
+    --muted: 243 244 246;
+    --muted-foreground: 107 114 128;
+    --accent: 59 130 246;
+    --accent-foreground: 255 255 255;
+    --border: 229 231 235;
+    --ring: 59 130 246;
   }
 
-  [data-theme='dark'] {
+  .dark {
     --background: 17 17 17;
     --foreground: 255 255 255;
+    --card: 17 24 39;
+    --card-foreground: 255 255 255;
+    --primary: 96 165 250;
+    --primary-foreground: 17 17 17;
+    --secondary: 31 41 55;
+    --secondary-foreground: 255 255 255;
+    --muted: 31 41 55;
+    --muted-foreground: 156 163 175;
+    --accent: 96 165 250;
+    --accent-foreground: 17 17 17;
+    --border: 55 65 81;
+    --ring: 96 165 250;
   }
 
   body {
-    @apply font-[Raleway] antialiased;
-    @apply bg-white text-gray-900 transition-colors duration-300;
-    @apply dark:bg-[#111111] dark:text-gray-300;
+    font-family: 'Raleway', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: white;
+    color: #111827;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .dark body {
+    background-color: #111111;
+    color: #d1d5db;
   }
 
   li {
-    @apply px-4 cursor-pointer;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    cursor: pointer;
   }
 }
 
 @layer components {
   .content-div {
-    @apply bg-no-repeat bg-cover bg-center h-[250px];
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 250px;
   }
 
   .content-div:hover {
-    @apply bg-pink-600;
+    background-color: #db2777;
   }
 
   .menu-hide {
-    @apply fixed top-0 -right-full w-full h-screen bg-white dark:bg-[#111111] flex flex-col justify-start pt-12 pl-6 transition-all duration-300;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 3rem;
+    padding-left: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .dark .menu-hide {
+    background-color: #111111;
   }
 
   .menu-show {
-    @apply fixed top-0 right-0 w-full h-screen bg-white dark:bg-[#111111] flex flex-col justify-start pt-12 pl-6 transition-all duration-300;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 3rem;
+    padding-left: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .dark .menu-show {
+    background-color: #111111;
   }
 }
 
@@ -47,7 +117,7 @@
   color-scheme: light;
 }
 
-:root[class~="dark"] {
+.dark {
   color-scheme: dark;
 }
 
@@ -65,26 +135,46 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-[#1a1a1a] transition-colors duration-300;
+  background-color: #f3f4f6;
+  transition: background-color 0.3s;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background-color: #1a1a1a;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-[#333] rounded-md transition-colors duration-300;
+  background-color: #d1d5db;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #333;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-[#444];
+  background-color: #9ca3af;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #444;
 }
 
 /* Selection color */
 ::selection {
-  @apply bg-blue-500/20 text-gray-900 dark:text-white;
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #111827;
+}
+
+.dark ::selection {
+  color: white;
 }
 
 /* Focus outline */
 *:focus {
   outline: none;
-  @apply shadow-[0_0_0_2px_rgba(59,130,246,0.5)];
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 }
 
 /* Animations */
@@ -93,9 +183,110 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes typewriter-cursor {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes timeline-dot-pulse {
+
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
   }
 }
 
@@ -103,4 +294,65 @@ body {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
+.animate-slideInLeft {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
 
+.animate-slideInRight {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.animate-typewriter-cursor {
+  animation: typewriter-cursor 1s step-end infinite;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out forwards;
+}
+
+.animate-timeline-dot {
+  animation: timeline-dot-pulse 2s ease-in-out infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass effect */
+.glass {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+  background: rgba(17, 17, 17, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 3D tilt effect base */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.tilt-card:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) scale(1.02);
+}
