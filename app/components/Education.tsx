@@ -27,7 +27,11 @@ const educationData: TimelineItem[] = [
     period: '2018 - 2021',
     title: 'Suankularb Wittayalai Thonburi School',
     institution: 'High School',
-    description: 'Served as vice president of student council and school projects.'
+    description: 'Science-Math English Program',
+    details: [
+      'Served as vice president of student council and school projects.',
+      'Participated in school projects and competitions.'
+    ]
   }
 ];
 
