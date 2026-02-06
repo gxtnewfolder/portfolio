@@ -30,7 +30,7 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/95 backdrop-blur-xl flex items-center justify-center z-[200]"
       onClick={onClose}
     >
       <motion.div 
@@ -38,13 +38,13 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="relative w-[90vw] h-[90vh] max-w-[1200px]"
+        className="relative w-[95vw] h-[85vh] max-w-[1200px] flex items-center justify-center"
         onClick={e => e.stopPropagation()}
       >
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-4 right-4 text-white hover:bg-white/20 z-10"
+          className="absolute top-4 right-4 text-white hover:bg-white/20 z-[210] bg-black/50 backdrop-blur-md rounded-full border border-white/10"
           onClick={onClose}
         >
           <FaTimes className="w-5 h-5" />
@@ -55,48 +55,53 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 z-10"
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 z-[210] bg-black/50 backdrop-blur-md rounded-full border border-white/10 w-12 h-12"
               onClick={(e) => {
                 e.stopPropagation();
                 onNavigate('prev');
               }}
             >
-              <FaChevronLeft className="w-6 h-6" />
+              <FaChevronLeft className="w-8 h-8" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 z-10"
+              className="absolute right-6 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 z-[210] bg-black/50 backdrop-blur-md rounded-full border border-white/10 w-12 h-12"
               onClick={(e) => {
                 e.stopPropagation();
                 onNavigate('next');
               }}
             >
-              <FaChevronRight className="w-6 h-6" />
+              <FaChevronRight className="w-8 h-8" />
             </Button>
           </>
         )}
         
-        <div className="relative w-full h-full">
-          <Image
+        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={project.images[currentIndex]}
             alt={project.title}
-            fill
-            sizes="(max-width: 1200px) 90vw, 1200px"
-            priority={currentIndex === 0}
-            className="object-contain"
+            className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300"
+            style={{ filter: "drop-shadow(0 0 20px rgba(0,0,0,0.5))" }}
           />
         </div>
         
         {project.images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-[210] bg-black/30 backdrop-blur-lg px-4 py-2 rounded-full border border-white/10">
             {project.images.map((_, idx) => (
-              <div 
+              <button 
                 key={idx}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // For simplicity, we just use the onNavigate logic or similar
+                  if (idx > currentIndex) onNavigate('next');
+                  else if (idx < currentIndex) onNavigate('prev');
+                }}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                   idx === currentIndex 
-                    ? 'bg-white w-6' 
-                    : 'bg-white/50 hover:bg-white/75'
+                    ? 'bg-blue-400 w-8' 
+                    : 'bg-white/30 hover:bg-white/60'
                 }`}
               />
             ))}
@@ -122,35 +127,43 @@ const ProjectCard: FC<{ project: Project; index: number; onImageClick: () => voi
       }}
     >
       <Card 
-        className="h-full overflow-hidden group"
+        className="h-full overflow-hidden group border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors duration-500"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <motion.div 
-          className="relative h-48 w-full overflow-hidden cursor-pointer"
+          className="relative h-56 w-full overflow-hidden cursor-pointer"
           onClick={onImageClick}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={project.images[0]}
             alt={project.title}
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            priority={index === 0}
-            quality={90}
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            onError={(e) => {
+              // Fallback if image fails to load
+              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/800x600?text=Project+Image';
+            }}
           />
           {/* Overlay on hover */}
           <motion.div 
-            className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
+            className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+            initial={{ opacity: 0.3 }}
+            animate={{ opacity: isHovered ? 0.7 : 0.4 }}
             transition={{ duration: 0.3 }}
           />
+          
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-medium border border-white/30">
+              View Project Details
+            </div>
+          </div>
+
           {project.images.length > 1 && (
-            <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs backdrop-blur-sm">
-              1/{project.images.length}
+            <div className="absolute top-4 right-4 bg-black/60 text-white px-2 py-1 rounded-md text-xs backdrop-blur-md border border-white/10 font-mono">
+              {project.images.length} IMAGES
             </div>
           )}
         </motion.div>
