@@ -1,5 +1,6 @@
 'use client';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt, FaBook, FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Image from 'next/image';
@@ -25,7 +26,30 @@ interface ImageModalProps {
 }
 
 const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNavigate }) => {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+    
+    // Handle escape key
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    
+    document.addEventListener('keydown', handleEscape);
+    
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [onClose]);
+
+  if (!mounted) return null;
+
+  const modalContent = (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -77,14 +101,18 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
           </>
         )}
         
-        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={project.images[currentIndex]}
-            alt={project.title}
-            className="max-w-full max-h-full object-contain shadow-2xl transition-all duration-300"
-            style={{ filter: "drop-shadow(0 0 20px rgba(0,0,0,0.5))" }}
-          />
+        <div className="relative w-full h-full flex items-center justify-center p-8">
+          <div className="relative w-full h-full">
+            <Image
+              src={project.images[currentIndex]}
+              alt={project.title}
+              fill
+              className="object-contain"
+              style={{ filter: "drop-shadow(0 0 20px rgba(0,0,0,0.5))" }}
+              sizes="95vw"
+              priority
+            />
+          </div>
         </div>
         
         {project.images.length > 1 && (
@@ -110,6 +138,8 @@ const ImageModal: FC<ImageModalProps> = ({ project, currentIndex, onClose, onNav
       </motion.div>
     </motion.div>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 const ProjectCard: FC<{ project: Project; index: number; onImageClick: () => void }> = ({ project, index, onImageClick }) => {
@@ -137,15 +167,12 @@ const ProjectCard: FC<{ project: Project; index: number; onImageClick: () => voi
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={project.images[0]}
             alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            onError={(e) => {
-              // Fallback if image fails to load
-              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/800x600?text=Project+Image';
-            }}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 512px"
           />
           {/* Overlay on hover */}
           <motion.div 
